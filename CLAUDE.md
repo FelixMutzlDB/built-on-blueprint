@@ -62,20 +62,26 @@ gate · assemble docs.
   honestly (5/4/5 on non-negotiable dims 1/2/6). 8 seams logged in
   `blueprint-out/_seam-report.md`; 3 P1 fixes applied. Workflow held — bends were
   contract/archetype gaps, not structural.
-- **Not yet:** not packaged as a plugin (no `.claude-plugin/`); fat scripts unimplemented;
-  grounding is model-recall only; judge is described, not wired.
+- **2026-06-01** — pushed to GitHub (`FelixMutzlDB/built-on-blueprint`). Added this CLAUDE.md.
+  Ran `/dupe-check` (Step 2), specced grounding fat-scripts (Step 3), wired the judge (Step 4).
+- **Not yet:** not packaged as a plugin (no `.claude-plugin/`); product-facts corpus + Vector
+  Search indexes unbuilt (scripts run on the local fallback); stages not yet wired to call the
+  scripts; assemble/render scripts still TODO.
 
 ## What's next (read `blueprint-out/_seam-report.md` first)
 
-2. **Placement** — `/dupe-check`, then decide plugin home (own plugin vs `fe-workflows`;
-   *not* strategist-toolbox). Scaffold `plugin.json` once decided.
-3. **Wire real grounding** — RAG / Vector Search over the PWAF corpus **and**
-   Databricks product-capability facts (finding **S3-1**: the gap is wider than first
-   scoped — Stage-3 product claims are model-recall too). This is also the future App
-   backend. Spec `pwaf_retrieve.py` + `sizing_adapter.py` + a per-tenant economics
-   post-step (seam **S5-1**) as fat scripts.
-4. **Wire the judge** — `resources/rubric/pwaf-rubric.md` → MLflow `@scorer` functions +
-   a seed eval dataset (compose `agent-evaluation` / `databricks-mlflow-evaluation`).
+2. **Placement — DECISION PENDING (needs Felix).** `/dupe-check` verdict: **STRONG OVERLAP**
+   with `fe-partner-blueprint` / `partner-architecture-blueprint` (same PWAF + built-on/ISV +
+   "blueprint" premise, but that's a field *one-pager*; this is a deep *build-spec*). Preferred:
+   contribute as a 2nd skill **inside `fe-partner-blueprint`** (reach out to maintainer; method
+   origin Panos Athanasiou). Fallback: own plugin, cross-linked. NOT `fe-workflows`, NOT strategist-toolbox.
+3. **Grounding — SPECCED, not live.** `scripts/pwaf_retrieve.py` (Vector Search + local
+   fallback, two corpora per **S3-1**), `scripts/sizing_adapter.py` (**S5-1a**),
+   `scripts/tenant_economics.py` (**S5-1b**), design in `scripts/GROUNDING.md`. TODO: curate
+   `resources/product_facts/`, build the VS indexes, wire stages 0/1/3/5 to call `retrieve()`.
+4. **Judge — WIRED.** `scripts/judge_scorers.py` (8 rubric dims → MLflow scorers + `apply_gate`),
+   seed dataset `resources/rubric/eval_dataset.jsonl`. TODO: run `mlflow.genai.evaluate` against a
+   real judge endpoint on the seed set; align thresholds.
 
 Remaining P2/P3 hardening seams (S2-1, S5-1, S6-1, S7-1) live in `_seam-report.md` — fold
 them in opportunistically, not as a separate pass.

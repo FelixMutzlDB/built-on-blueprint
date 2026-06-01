@@ -21,4 +21,10 @@ dimension | score (1-5) | evidence | fix applied
 Overall gate: all dimensions ≥ 3, dimensions 1/2/6 ≥ 4 (these are non-negotiable for a
 PWAF-grade spec). Record any irreducible gap explicitly.
 
-TODO: formalize as MLflow `@scorer` functions + a seed eval dataset (agent-evaluation skill).
+## Wired (Step 4)
+This rubric is formalized as runnable MLflow GenAI scorers + gate in
+`scripts/judge_scorers.py` (`RUBRIC` is the single source of truth; the table above and the
+code must stay in sync). Seed eval dataset: `resources/rubric/eval_dataset.jsonl` (the
+passing Firefly reference run + two should-fail cases: rebuild-UI anti-pattern, overclaim/
+no-whitespace). Run via `mlflow.genai.evaluate(data=..., scorers=pwaf_scorers())` then
+`apply_gate(...)`. Composes the agent-evaluation / databricks-mlflow-evaluation skills.
